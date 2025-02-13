@@ -1,0 +1,26 @@
+services:
+  php:
+    build: .
+    container_name: sirma_php_container
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - symfony_network
+  nginx:
+    image: nginx:alpine
+    container_name: sirma_nginx_container
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www/html
+    depends_on:
+      - php
+    networks:
+      - symfony_network
+
+networks:
+  symfony_network:
+    driver: bridge
